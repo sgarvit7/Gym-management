@@ -4,17 +4,19 @@ import { data, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 const Login = () => {
+   const apiUrl  = 'https://gym-management-m4b9.onrender.com';
+
   const [loginFeild, setLoginFeild] = useState({ userName: "", password: "" });
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
+      console.log(apiUrl)
         console.log(loginFeild)
-      const response = await axios.post("http://localhost:4000/gym/Login",{
+      const response = await axios.post("216.24.60.0/24/gym/Login",{
         data: {
           userName: loginFeild.userName,
         password: loginFeild.password
         }
-
       });
       navigate('/Dashboard')
       localStorage.setItem('gymName',response.data.data.gymName);

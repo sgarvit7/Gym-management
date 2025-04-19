@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import 'dotenv/config';
 
-mongoose.connect('mongodb://localhost:27017/gym')
+mongoose.connect(process.env.MONGO)
 .then(() => {
 console.log("database connected")    
 }).catch((err) => {
