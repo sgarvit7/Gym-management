@@ -12,7 +12,7 @@ const Login = () => {
     try {
       console.log(apiUrl)
         console.log(loginFeild)
-      const response = await axios.post("216.24.60.0/24/gym/Login",{
+      const response = await axios.post(`${apiUrl}/gym/Login`,{
         data: {
           userName: loginFeild.userName,
         password: loginFeild.password

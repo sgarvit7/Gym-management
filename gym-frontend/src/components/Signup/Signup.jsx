@@ -38,7 +38,7 @@ const Signup = () => {
   const handleRegister = async ()=>{
    
       try {
-        const response = await axios.post("http://localhost:4000/gym/register",{
+        const response = await axios.post("https://gym-management-m4b9.onrender.com/gym/register",{
           data:{
             userName : inputField.userName,
             password : inputField.password,
