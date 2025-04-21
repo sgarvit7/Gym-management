@@ -6,7 +6,7 @@ import axios from "axios"
 
 export const monthlyJoined = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/member/monthlyMember", {
+      const res = await axios.get("https://gym-management-m4b9.onrender.com/member/monthlyMember", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -22,7 +22,7 @@ export const monthlyJoined = async () => {
 
   export const threeDays = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/member//expiringin3days", {
+      const res = await axios.get("https://gym-management-m4b9.onrender.com/member//expiringin3days", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -38,7 +38,7 @@ export const monthlyJoined = async () => {
 
   export const expiringSoon = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/member/expiringin4-7days", {
+      const res = await axios.get("https://gym-management-m4b9.onrender.com/member/expiringin4-7days", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -54,7 +54,7 @@ export const monthlyJoined = async () => {
 
   export const expired = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/member/expiredMember", {
+      const res = await axios.get("https://gym-management-m4b9.onrender.com/member/expiredMember", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -70,7 +70,7 @@ export const monthlyJoined = async () => {
 
   export const inActive = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/member/inactiveMember", {
+      const res = await axios.get("https://gym-management-m4b9.onrender.com/member/inactiveMember", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

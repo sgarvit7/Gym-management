@@ -65,9 +65,6 @@ const Member = () => {
     setAddMember((prev) => !prev);
   };
   const [currentPage, setCurrentPage] = useState(1);
-
-  
-
   useEffect(() => {
     fetchData(0, 9);
   }, []);
@@ -174,15 +171,11 @@ catch (err) {
         />
         <div onClick={()=>{handleSearchData()}} className="bg-slate-900 p-3 border-2 text-white rounded-lg cursor-pointer">
           <img src="search"/>
-        
-          
         </div>
       </div>
-
       <div className="mt-5 text-xl flex justify-between text-slate-900">
         <div>Total Members</div>
         {
-
         !isSearchModeOn?<div className="gap-2 flex">
           <div className="flex ">
             {startFrom + 1}-{endTo} of {totalData} member
@@ -195,7 +188,6 @@ catch (err) {
           >
             <img src={la} />
           </div>
-
           <div
             className={`w-8 h-8 cursor-pointer border-2  flex items-center justify-center hover:text-white 
         `}
@@ -207,7 +199,6 @@ catch (err) {
           </div>
         </div>:null}
       </div>
-
       <div className="bg-slate-100 p-5 mt-5 rounded-lg grid gap-2 grid-cols-3 overflow-x-auto h-[65%]">
             {
               data.map((item,index)=>{
