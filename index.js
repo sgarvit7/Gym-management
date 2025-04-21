@@ -11,12 +11,11 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-    origin:'https://gym-management-sigma-mocha.vercel.app/',
+     origin:'https://gym-management-sigma-mocha.vercel.app',
     credentials:true
 }));
 
 app.use(bodyParser.json());
-
 app.use((req, res, next) => {
     console.log(`Incoming Request: ${req.method} ${req.url}`);
     console.log("Request Headers:", req.headers);

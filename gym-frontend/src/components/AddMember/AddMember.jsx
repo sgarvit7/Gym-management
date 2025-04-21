@@ -12,7 +12,7 @@ const AddMember = ({handleClose}) => {
 
   const fetchMembership = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/pack/getMembership", {
+      const res = await axios.get("https://gym-management-m4b9.onrender.com/pack/getMembership", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -31,7 +31,7 @@ const AddMember = ({handleClose}) => {
    
     try {
         const response = await axios.post(
-          "http://localhost:4000/pack/addMembership",
+          "https://gym-management-m4b9.onrender.com/pack/addMembership",
           {
             data:{
             months: inputField.months,
