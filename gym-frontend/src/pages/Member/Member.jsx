@@ -75,7 +75,7 @@ const Member = () => {
   const fetchData = async (skip, limit) => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/member/getMembers?skip=${skip}&limit=${limit}`,
+        `https://gym-management-m4b9.onrender.com/member/getMembers?skip=${skip}&limit=${limit}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -108,7 +108,7 @@ const handleSearchData = async ()=>{
   try {
   if(search !==""){
       const res = await axios.get(
-        `http://localhost:4000/member/searchMember?searchTerm=${search}`,
+        `https://gym-management-m4b9.onrender.com/member/searchMember?searchTerm=${search}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
