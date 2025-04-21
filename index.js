@@ -11,7 +11,11 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
+<<<<<<< HEAD
      origin:'https://gym-management-sigma-mocha.vercel.app',
+=======
+    origin:'https://gym-management-sigma-mocha.vercel.app',
+>>>>>>> d3e98a0c4e67c76286bc9cbf7428a6a4867f2f24
     credentials:true
 }));
 
