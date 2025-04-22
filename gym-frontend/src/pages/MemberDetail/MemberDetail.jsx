@@ -27,7 +27,7 @@ const MemberDetail = () => {
     try {
       console.log(id);
       const res = await axios.get(
-        `http://localhost:4000/member/memberDetails/${id}`,
+        `https://gym-management-m4b9.onrender.com/member/memberDetails/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -50,7 +50,7 @@ const MemberDetail = () => {
 
   const fetchMembership = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/pack/getMembership", {
+      const res = await axios.get("https://gym-management-m4b9.onrender.com/pack/getMembership", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -102,7 +102,7 @@ const MemberDetail = () => {
     try {
       console.log(selectedOption);
       const response = await axios.put(
-        `http://localhost:4000/member/updateMembership/${id}`,
+        `https://gym-management-m4b9.onrender.com/member/updateMembership/${id}`,
         {
            
             Memberships: selectedOption,

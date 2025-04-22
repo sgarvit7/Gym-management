@@ -1,9 +1,5 @@
 import axios from "axios"
 
-
-
-
-
 export const monthlyJoined = async () => {
     try {
       const res = await axios.get("https://gym-management-m4b9.onrender.com/member/monthlyMember", {
