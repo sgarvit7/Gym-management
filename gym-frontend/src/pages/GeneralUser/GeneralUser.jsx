@@ -58,7 +58,7 @@ const GeneralUser = ()=>{
         </Link>   
       </div>
       <div className="mt-5 ml-5 text-xl text-slate-900">
-        {/* {header} */}
+        {header}
       </div>
        <div>
       <div className="bg-slate-100 p-5 mt-5 rounded-lg grid gap-2 grid-cols-3 overflow-x-auto h-[65%]">
