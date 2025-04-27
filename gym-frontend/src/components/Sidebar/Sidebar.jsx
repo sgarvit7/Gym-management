@@ -1,86 +1,86 @@
-import React,{useState , useEffect} from "react";
-import { use } from "react";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+
 const Sidebar = () => {
+  const location = useLocation();
+  const [greeting, setGreeting] = useState("");
+  const [open, setOpen] = useState(false);
 
-const location = useLocation();
+  useEffect(() => {
+    const h = new Date().getHours();
+    if (h < 12) setGreeting("Good Morning ☕");
+    else if (h < 18) setGreeting("Good Afternoon ☀");
+    else if (h < 21) setGreeting("Good Evening 🌆");
+    else setGreeting("Good Night 🌙");
+  }, []);
 
-  const [greeting,setGreeting] = useState("");
-  const greetingMessage =()=>{
-        const time = new Date().getHours();
-        if(time <12){
-            setGreeting("Good Morning ☕");
-        }else if(time <18){
-            setGreeting("Good Afternoon ☀");
-        }else if(time<21){
-            setGreeting("good evening 🌆");
-        }else{
-            setGreeting("good night 🌙");
-        }
-  }
-  
-    useEffect(()=>{
-        greetingMessage()
-    },[])
-  
-  
-    return (
-    <div className="w-1/4 h-[100vh] border-2 bg-black text-white p-5">
-      <div className=" text-center text-3xl font-extralight p-5">
-        {localStorage.getItem('gymName')};
-      </div>
-      <div className="flex gap-5 my-5">
-        <div className="w-[100px] h-[100px] rounded-lg">
+  const links = [
+    { name: "Dashboard", path: "/Dashboard", icon: "🏠" },
+    { name: "Members", path: "/Member", icon: "👥" },
+    { name: "Logout", path: "/Logout", icon: "🔒" },
+  ];
+
+  return (
+    <>
+      {/* Mobile toggle */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-30 p-2 bg-black text-white rounded"
+        onClick={() => setOpen(o => !o)}
+      >
+        {open ? "✕" : "☰"}
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-20 transform w-full
+          bg-black text-white p-6 w-64 md:static md:translate-x-0
+          h-full md:h-screen transition-transform duration-300
+          ${open ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        <div className="text-center text-2xl font-light mb-8">
+          {localStorage.getItem("gymName") || "gym2"}
+        </div>
+
+        {/* Profile */}
+        <div className="flex items-center space-x-4 mb-10">
           <img
-            alt="gym pic "
-            className="w-full h-full rounded-full"
-            src={localStorage.getItem('gymPic')}
+            src={localStorage.getItem("gymPic") || "/assets/profile-placeholder.png"}
+            alt="profile"
+            className="w-20 h-20 rounded-full border-2 border-gray-700"
           />
-        </div>
-        <div>
-          <div className="text-xl">{greeting}</div>
-          <div className="text-xl font-semibold mt-2">admin</div>
-        </div>
-      </div>
-
-      <div className="mt-10 py-10 border-t-2 border-gray-700">
-
-        <Link to={'/Dashboard'} className="flex gap-4 font-semibold text-xl bg-slate-800 p-3 rounded-xl cursor-pointer hover:bg-slate-300 hover:text-black">
-          <div className="w-[30px] h-[30px] rounded-lg">
-            <img
-              alt="gym pic "
-              className="w-full h-full rounded-full"
-              src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
-            />
+          <div>
+            <p className="text-lg">{greeting}</p>
+            <p className="text-xl font-semibold">admin</p>
           </div>
-          <div>Dashboard</div>
-          </Link>        
-        <Link to={'/Member'} className="flex gap-4 mt-5 font-semibold text-xl bg-slate-800 p-3 rounded-xl cursor-pointer hover:bg-slate-300 hover:text-black">
-          <div className="w-[30px] h-[30px] rounded-lg">
-            <img
-              alt="gym pic "
-              className="w-full h-full rounded-full"
-              src="https://static.vecteezy.com/system/resources/thumbnails/000/550/535/small/user_icon_007.jpg"
-            />
-          </div>
-          <div>Members</div>
-        </Link>
-        
-        <div className="flex gap-4  mt-5 font-semibold text-xl bg-slate-800 p-3 rounded-xl cursor-pointer hover:bg-slate-300 hover:text-black">
-          <div className="w-[30px] h-[30px] rounded-lg">
-            <img
-              alt="gym pic "
-              className="w-full h-full rounded-full"
-              src="https://thumb.ac-illust.com/8a/8ad859c65a6967da3ee58835e37fade3_t.jpeg"
-            />
-          </div>
-          <div>Logout</div>
         </div>
-        
 
-      </div>
-    </div>
+        {/* Navigation */}
+        <nav className="space-y-4">
+          {links.map(({ name, path, icon }) => {
+            const active = location.pathname === path;
+            return (
+              <Link
+                key={name}
+                to={path}
+                className={`
+                  flex items-center px-4 py-3 rounded-lg text-lg font-medium
+                  transition-colors
+                  ${active
+                    ? "bg-slate-700 text-white"
+                    : "bg-slate-800 text-gray-300 hover:bg-slate-700 hover:text-white"}
+                `}
+              >
+                <span className="text-2xl">{icon}</span>
+                <span className="ml-3">{name}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      </aside>
+    </>
   );
 };
+
 export default Sidebar;

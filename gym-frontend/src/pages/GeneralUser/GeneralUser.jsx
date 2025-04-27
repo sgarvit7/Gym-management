@@ -47,7 +47,7 @@ const GeneralUser = ()=>{
     }
 
     return(
- <div className="text-black p-5 w-3/4 h-[100vh]">
+ <div className="text-black  h-[100vh]">
       {/* block for banner */}
       <div className="border-2 bg-slate-900 flex justify-between w-full text-white rounded-lg p-3">
         <Link to={'/Dashboard'}
@@ -58,20 +58,23 @@ const GeneralUser = ()=>{
         </Link>   
       </div>
       <div className="mt-5 ml-5 text-xl text-slate-900">
-        {header}
+        {/* {header} */}
       </div>
-      <div>
+       <div>
       <div className="bg-slate-100 p-5 mt-5 rounded-lg grid gap-2 grid-cols-3 overflow-x-auto h-[65%]">
-        {
+
+        
+       {
           data.map((item,index)=>{
             return(
                 <MemberCard  key={item._id || index} item={item}/>
             )
+            
 }
        ) }
 
       </div>
-      </div>
+     </div>
 
 
     <ToastContainer/>        
