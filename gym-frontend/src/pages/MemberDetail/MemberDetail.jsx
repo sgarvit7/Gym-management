@@ -3,29 +3,26 @@ import { useNavigate, useParams } from "react-router-dom";
 import Switch from "react-switch";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+
 const MemberDetail = () => {
   const navigate = useNavigate();
-  const [inputField, setInputField] = useState({
-    membership: "",
-  });
-
   const { id } = useParams();
-  const [data, setData] = useState([]);
-  const [Status, setStatus] = useState("false");
+
+  const [inputField, setInputField] = useState({ membership: "" });
+  const [data, setData] = useState({});
+  const [status, setStatus] = useState("false");
   const [selectedOption, setSelectedOption] = useState("");
-  const [memberships, setMembership] = useState({});
-  const handleSwitchbtn = () => {
-    let status = Status === "Active" ? "Pending" : "Active";
-    setStatus(status);
-  };
+  const [memberships, setMembership] = useState([]);
   const [renew, setRenew] = useState(false);
-  const handleRenew = () => {
-    setRenew((prev) => !prev);
+
+  const handleSwitchToggle = () => {
+    setStatus(status === "Active" ? "Pending" : "Active");
   };
+
+  const handleRenew = () => setRenew((prev) => !prev);
 
   const fetchData = async () => {
     try {
-      console.log(id);
       const res = await axios.get(
         `https://gym-management-m4b9.onrender.com/member/memberDetails/${id}`,
         {
@@ -35,61 +32,51 @@ const MemberDetail = () => {
           withCredentials: true,
         }
       );
-      toast.success("data fetched");
-      console.log(res);
       setData(res.data.Member);
       setStatus(res.data.Member.status);
+      toast.success("Data fetched successfully");
     } catch (err) {
-      console.log(err);
-      toast.error(res);
+      console.error(err);
+      toast.error(err.response?.data?.error || "Failed to fetch data");
     }
   };
-  const handleOnChange = (event, name) => {
-    setInputField({ ...inputField, [name]: event.target.value });
-  };
 
-  const fetchMembership = async () => {
+  const fetchMemberships = async () => {
     try {
-      const res = await axios.get("https://gym-management-m4b9.onrender.com/pack/getMembership", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        withCredentials: true,
-      });
-
+      const res = await axios.get(
+        "https://gym-management-m4b9.onrender.com/pack/getMembership",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+      setMembership(res.data.Membership || []);
+      if (res.data.Membership.length === 0) {
+        return toast.error("No Membership added yet");
+      }
+      const defaultId = res.data.Membership[0]._id;
+      setSelectedOption(defaultId);
+      setInputField({ ...inputField, membership: defaultId });
       toast.success(res.data.message);
-      setMembership(res.data.Membership);
-      if(res.data.Membership.length==0){
-        return toast.error("No Membership added yet,",{
-            className:"text-lg"
-        })
-
-      }
-      else{
-        let a  = res.data.Membership[0]._id
-        setSelectedOption(a);
-        setInputField({...inputField,membership:a});
-      }
-         } 
-         
-       catch (err) {
-      console.log(err);
-      toast.error(res.data.err);
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.error || "Failed to fetch memberships");
     }
   };
- 
 
   useEffect(() => {
     fetchData();
   }, [id]);
+
   useEffect(() => {
-    fetchMembership();
+    fetchMemberships();
   }, []);
 
-  const handleOnChangeSelect = (event) => {
-    let value = event.target.value;
-    setSelectedOption(value);
-    setInputField({ ...inputField, membership: value });
+  const handleSelectChange = (e) => {
+    setSelectedOption(e.target.value);
+    setInputField({ ...inputField, membership: e.target.value });
   };
 
   const isDateInPast = (inputDate) => {
@@ -98,16 +85,11 @@ const MemberDetail = () => {
     return givenDate < today;
   };
 
-  const handlSavebtn = async () => {
+  const handleSave = async () => {
     try {
-      console.log(selectedOption);
       const response = await axios.put(
         `https://gym-management-m4b9.onrender.com/member/updateMembership/${id}`,
-        {
-           
-            Memberships: selectedOption,
-          
-        },
+        { Memberships: selectedOption },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -117,101 +99,89 @@ const MemberDetail = () => {
       );
       toast.success(response.data.message);
     } catch (err) {
-      if (err.response) {
-        // The server responded with a status other than 2xx
-        toast.error(err.response.data.message);
-      } else {
-        // Some other error (e.g., network error)
-        toast.error(err.message);
-      }
+      console.error(err);
+      toast.error(err.response?.data?.message || "Update failed");
     }
   };
 
   return (
-    <div className="w-3/4 text-black">
-      <div className=" flex w-1/5  text-white rounded-lg p-3">
+    <div className="w-full min-h-screen bg-white p-4">
+      {/* Go Back */}
+      <div className="flex">
         <div
-          onClick={() => {
-            navigate(-1);
-          }}
-          className="border-2 bg-slate-900 pl-3 pr-3 pt-1 rounded-2xl flex cursor-pointer hover:bg-white  hover:text-black"
+          onClick={() => navigate(-1)}
+          className="border-2 bg-slate-900 text-white pl-4 pr-4 pt-2 pb-2 rounded-2xl cursor-pointer hover:bg-white hover:text-black transition"
         >
           Go Back
         </div>
       </div>
-      <div className="mt-10 p-2">
-        <div className="w-[100%] h-fit flex">
-          <div className="w-1/3 mx-auto">
-            <img src={data.profilePic} className="w-full mx-auto" />
+
+      {/* Main Section */}
+      <div className="mt-10 flex flex-col md:flex-row gap-6">
+        {/* Profile Picture */}
+        <div className="w-full md:w-1/3 flex justify-center">
+          <img
+            src={data.profilePic}
+            alt="Profile"
+            className="w-60 h-60 object-cover rounded-full shadow-md"
+          />
+        </div>
+
+        {/* Member Info */}
+        <div className="w-full md:w-2/3 text-xl">
+          <div className="mb-4 font-semibold">Name: {data.name}</div>
+          <div className="mb-4 font-semibold">Mobile: {data.MobileNo}</div>
+          <div className="mb-4 font-semibold">Address: {data.address}</div>
+          <div className="mb-4 font-semibold">Joined Date: {data.joininDate}</div>
+          <div className="mb-4 font-semibold">Next Bill Date: {data.nextBillDate}</div>
+          <div className="mb-6 font-semibold flex items-center gap-4">
+            Status:
+            <Switch
+              onColor="#6366f1"
+              checked={status === "Active"}
+              onChange={handleSwitchToggle}
+            />
           </div>
-          <div className="w-2/3 mt-5 text-xl p-5">
-            <div className="mt-1 mb-2 text-2xl font-semibold">
-              Name : {data.name}
+
+          {/* Renew Button */}
+          {isDateInPast(data.nextBillDate) && (
+            <div
+              onClick={handleRenew}
+              className="rounded-lg p-3 border-2 border-slate-900 text-center cursor-pointer hover:bg-black hover:text-white transition w-full md:w-1/2"
+            >
+              Renew
             </div>
-            <div className="mt-1 mb-2 text-2xl font-semibold">
-              Mobile : {data.MobileNo}
-            </div>
-            <div className="mt-1 mb-2 text-2xl font-semibold">
-              Address : {data.address}
-            </div>
-            <div className="mt-1 mb-2 text-2xl font-semibold">
-              joined date : {data.joininDate}
-            </div>
-            <div className="mt-1 mb-2 text-2xl font-semibold">
-              Next bill date : {data.nextBillDate}
-            </div>
-            <div className="mt-1 mb-2 text-2xl font-semibold">
-              Status :{" "}
-              <Switch
-                onColor="#6366f1"
-                checked={Status === "Active"}
-                onChange={() => {
-                  handleSwitchbtn();
-                }}
-              />{" "}
-            </div>
-            {isDateInPast(data.nextBillDate) && (
-              <div
-                onClick={() => {
-                  handleRenew();
-                }}
-                className="mt-1 rounded-lg p-3 border-2 border-slate-900 text-center w-full md:w-1/2 cursor-pointer hover:text-white hover:bg-black"
-              >
-                Renew
-              </div>
-            )}
-            {renew && (
-              <div className="rounded-lg p-3 mt-5 mx-auto mb-5 h-fit bg-slate-50 md:w-[50%]">
-                <div className="w-full">
-                  <div className="my-5">Membership</div>
-                  {/* <select className="w-full border-2 p-2 rounded-lg">
-                   */}
-                  <select
-                    value={selectedOption}
-                    onChange={handleOnChangeSelect}
-                    className="border-2 w-[90%] h-12 pt-2 pb-2 border-slate-400 rounded-md placeholder:text-gray"
-                  >
-                    {memberships.map((item, index) => {
-                      return (
-                        <option key={index} value={item._id}>
-                          {item.month} Months Membership
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <div
-                    className="mt-3 rounded-lg p-1 border-2 border-slate-900 text-xl text-center w-1/3 h-[45px] mx-auto cursor-pointer hover:text-white hover:bg-black "
-                    onClick={handlSavebtn}
-                  >
-                    Save
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
+
+      {/* Renew Membership Form */}
+      {renew && (
+        <div className="bg-slate-50 p-5 mt-8 rounded-lg max-w-2xl mx-auto">
+          <div className="text-lg mb-4">Renew Membership</div>
+          <select
+            value={selectedOption}
+            onChange={handleSelectChange}
+            className="border-2 w-full p-3 rounded-lg text-lg"
+          >
+            {memberships.map((item, index) => (
+              <option key={index} value={item._id}>
+                {item.month} Months Membership
+              </option>
+            ))}
+          </select>
+          <div
+            onClick={handleSave}
+            className="mt-4 rounded-lg p-3 border-2 border-slate-900 text-center cursor-pointer hover:bg-black hover:text-white transition text-lg"
+          >
+            Save
+          </div>
+        </div>
+      )}
+
+      <ToastContainer />
     </div>
   );
 };
+
 export default MemberDetail;
