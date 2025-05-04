@@ -58,9 +58,9 @@ const Signup = () => {
       toast.success(response.data.message);
     } catch (err) {
       if (err.response) {
-        toast.error(err.response.data.message);
+        toast.error("some error occured plss fill the feilds properly");
       } else {
-        toast.error(err.message);
+        toast.error("some error occured plss fill the feilds properly");
       }
     }
   };
@@ -102,7 +102,9 @@ const Signup = () => {
         className="w-full my-4 text-white bg-slate-800 p-2 rounded-lg"
         placeholder="Enter Password"
       />
-
+      <label className="w-full my-4 text-black  p-2 rounded-lg">
+        Upload Gym Pic
+      </label>
       <input
         onChange={uploadImage}
         type="file"

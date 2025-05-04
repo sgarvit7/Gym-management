@@ -10,7 +10,7 @@ export const register = async (req, res) => {
     const isExist = await Gym.findOne({ userName : data.userName });
     if (isExist) {
       res.status(400).json({
-        error: "username already exist ,please try with other userName",
+        errMessage : "username already exist ,please try with other userName",
       });
     } else {
       const newGym = new Gym({
